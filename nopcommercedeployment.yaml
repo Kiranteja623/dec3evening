@@ -1,0 +1,104 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nopcommerce-deployment
+  labels:
+    app: nopcommerce
+spec:
+  replicas: 3
+  minReadySeconds: 15
+  strategy:
+    type: Rolling Update
+  selector:
+    matchLabels:
+      app: nopcommerce
+  template:
+    metadata:
+      name: nopcommerceapp
+    spec:
+      containers:
+        - name: nopcommerce-container
+          image: kiranteja623/nopcommerce:2.0
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: nopcommerce
+   labels:
+     app: nopcommerce
+spec:
+  selector:
+    matchLabels:
+      app: nopcommerce
+  Ports:
+    - containerPort: 35000
+      targetPort: 8080
+      name: nopcommerce-ports
+  type: LoadBalancer
+
+
+
+
+#FROM ubuntu:22.04 as unzip
+#RUN mkdir /Nop
+#RUN apt update && \
+#    apt install wget unzip -y && \
+#    cd /Nop && \
+#    wget "https://github.com/nopSolutions/nopCommerce/releases/download/release-4.50.3/nopCommerce_4.50.3_NoSource_linux_x64.zip" &&\
+#    unzip /Nop/nopCommerce_4.50.3_NoSource_linux_x64.zip && \
+#    rm /Nop/nopCommerce_4.50.3_NoSource_linux_x64.zip
+
+
+#FROM mcr.microsoft.com/dotnet/aspnet:6.0
+#LABEL author="khaja"
+#COPY  --from=unzip /Nop /Nop
+#WORKDIR /Nop
+#EXPOSE 80
+#CMD ["dotnet","/Nop/Nop.Web.dll"]
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nopcommerce-deployment
+  labels:
+    app: nopcommerce
+spec:
+  replicas: 3
+  minReadySeconds: 15
+  strategy:
+    type: Rolling Update
+  selector:
+    matchLabels:
+      app: nopcommerce
+  template:
+    metadata:
+      name: nopcommerceapp
+    spec:
+      containers:
+        - name: nopcommerce-container
+          image: kiranteja623/nopcommerce:4.0
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+   name: nopcommerce
+   labels:
+     app: nopcommerce
+spec:
+  selector:
+    matchLabels:
+      app: nopcommerce
+  Ports:
+    - containerPort: 35000
+      targetPort: 8080
+      name: nopcommerce-ports
+  type: LoadBalancer
